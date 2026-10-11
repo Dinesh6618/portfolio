@@ -1,6 +1,7 @@
 import {
   Ambulance,
   BarChart3,
+  Binary,
   BookOpen,
   Brain,
   CalendarCheck,
@@ -64,6 +65,7 @@ export const skillGroups = [
     skills: [
       { name: 'Python', icon: Terminal },
       { name: 'Java', icon: Coffee },
+      { name: 'C', icon: Binary },
     ],
   },
   {
