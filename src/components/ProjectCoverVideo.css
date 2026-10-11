@@ -1,0 +1,129 @@
+/* Project covers that play like a video (see Cover in Projects.jsx).
+   Stacked screenshots crossfade; the visible one drifts with a slow pan and zoom; a thin gold progress bar fills
+   once per slide. Black and gold only. */
+
+.cover-media .cover-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  opacity: 0;
+  transform-origin: 20% 15%;
+  will-change: opacity, transform;
+  transition: opacity 0.8s ease;
+}
+
+.cover-media .cover-slide.is-alt {
+  transform-origin: 80% 70%;
+}
+
+/* the first slide is the still frame, shown until playback starts or when motion is reduced */
+.cover-media .cover-slide:first-of-type,
+.cover-media .cover-slide.is-on {
+  opacity: 1;
+}
+
+.project-cover[data-playing='true'] .cover-slide:first-of-type:not(.is-on) {
+  opacity: 0;
+}
+
+/* the picture on screen drifts (and keeps drifting while it fades out, so nothing snaps back) */
+.project-cover[data-playing='true'] .cover-slide.is-on,
+.project-cover[data-playing='true'] .cover-slide.is-leaving {
+  animation: cover-drift 4.6s cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+
+.project-cover[data-playing='true'] .cover-slide.is-alt.is-on,
+.project-cover[data-playing='true'] .cover-slide.is-alt.is-leaving {
+  animation-name: cover-drift-alt;
+}
+
+@keyframes cover-drift {
+  from {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.13) translate3d(-1.6%, -1.2%, 0);
+  }
+}
+
+@keyframes cover-drift-alt {
+  from {
+    transform: scale(1.12) translate3d(-1.4%, 0.4%, 0);
+  }
+  to {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+}
+
+/* progress: one segment per slide, the current one fills over the slide's length */
+.cover-progress {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.cover-progress > span {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(244, 239, 226, 0.22);
+}
+
+.cover-progress > span.is-done {
+  background: rgba(242, 207, 91, 0.85);
+}
+
+.cover-progress b {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, #d4af37, #ffd76a);
+  animation: cover-fill var(--slide-ms, 3600ms) linear forwards;
+}
+
+@keyframes cover-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* the still frame also shows a full first segment so the bar is not empty before playback begins */
+.cover-progress > span.is-now:not(:has(b)) {
+  background: rgba(242, 207, 91, 0.5);
+}
+
+/* a soft vignette so the progress bar and the card edge stay readable over bright screenshots */
+.cover-media::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 34%;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(5, 5, 5, 0.55), rgba(5, 5, 5, 0));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-cover[data-playing] .cover-slide.is-on,
+  .project-cover[data-playing] .cover-slide.is-leaving {
+    animation: none;
+  }
+  .cover-media .cover-slide {
+    transition: none;
+  }
+  .cover-progress b {
+    animation: none;
+    transform: scaleX(1);
+  }
+}

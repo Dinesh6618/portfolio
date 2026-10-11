@@ -1,20 +1,79 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, Check, ExternalLink } from 'lucide-react'
 import Section from './Section.jsx'
 import Reveal from './Reveal.jsx'
 import Spotlight from './Spotlight.jsx'
 import ProjectModal from './ProjectModal.jsx'
+import Words from './Words.jsx'
 import { GithubIcon } from './Icons.jsx'
 import { projectFilters, projects } from '../data/content.js'
+import './ProjectCoverVideo.css'
 
-// Card cover: first screenshot when it loads, otherwise an abstract accent-coloured tile.
-function Cover({ project }) {
-  const [failed, setFailed] = useState(false)
-  const first = project.screenshots[0]
+// Card cover. It plays like a short video: the project's screenshots crossfade one after another, each with a
+// slow pan and zoom, and a thin progress bar shows where it is. Playback runs only while the card is on screen and
+// the tab is visible, starts at a different moment on each card, and is a still first frame with reduced motion.
+// With no screenshots (or none that load) it is an abstract accent-coloured tile.
+const SLIDE_MS = 3600
+
+function Cover({ project, index = 0 }) {
+  const [failed, setFailed] = useState({})
+  const [current, setCurrent] = useState(0)
+  const [previous, setPrevious] = useState(-1)
+  const [playing, setPlaying] = useState(false)
+  const hostRef = useRef(null)
+  const slides = project.screenshots.filter((shot) => !failed[shot.src])
+  const count = slides.length
   const Icon = project.icon
 
+  // play only while the card is on screen and the tab is visible
+  useEffect(() => {
+    const host = hostRef.current
+    if (!host || count < 2) return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    let visible = false
+    const update = () => setPlaying(visible && !document.hidden)
+    const observer =
+      typeof IntersectionObserver === 'undefined'
+        ? null
+        : new IntersectionObserver(
+            ([entry]) => {
+              visible = entry.isIntersecting
+              update()
+            },
+            { threshold: 0.25 },
+          )
+    if (observer) observer.observe(host)
+    else visible = true
+    document.addEventListener('visibilitychange', update)
+    update()
+    return () => {
+      observer?.disconnect()
+      document.removeEventListener('visibilitychange', update)
+    }
+  }, [count])
+
+  // the clock: one slide every SLIDE_MS, each card a little out of step with its neighbours
+  useEffect(() => {
+    if (!playing || count < 2) return undefined
+    let interval = 0
+    const start = window.setTimeout(() => {
+      interval = window.setInterval(() => {
+        setCurrent((c) => {
+          setPrevious(c)
+          return (c + 1) % count
+        })
+      }, SLIDE_MS)
+    }, (index % 4) * 450)
+    return () => {
+      clearTimeout(start)
+      clearInterval(interval)
+    }
+  }, [playing, count, index])
+
+  const active = Math.min(current, Math.max(0, count - 1))
+
   return (
-    <div className="project-cover" aria-hidden="true">
+    <div ref={hostRef} className="project-cover" aria-hidden="true" data-playing={playing ? 'true' : 'false'}>
       <div className="shot-chrome">
         <i />
         <i />
@@ -22,11 +81,30 @@ function Cover({ project }) {
         <span>{project.name.toLowerCase().replace(/\s+/g, '-')}</span>
       </div>
       <div className="cover-media">
-        {first && !failed ? (
-          <img src={first.src} alt="" loading="lazy" decoding="async" onError={() => setFailed(true)} />
+        {count > 0 ? (
+          slides.map((shot, i) => (
+            <img
+              key={shot.src}
+              className={`cover-slide${i === active ? ' is-on' : ''}${i === previous && i !== active ? ' is-leaving' : ''}${i % 2 ? ' is-alt' : ''}`}
+              src={shot.src}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              onError={() => setFailed((f) => ({ ...f, [shot.src]: true }))}
+            />
+          ))
         ) : (
           <div className="cover-art">
             <Icon size={56} strokeWidth={1.4} />
+          </div>
+        )}
+        {count > 1 && (
+          <div className="cover-progress" style={{ '--slide-ms': `${SLIDE_MS}ms` }}>
+            {slides.map((shot, i) => (
+              <span key={shot.src} className={i < active ? 'is-done' : i === active ? 'is-now' : undefined}>
+                {i === active && playing && <b key={`${i}-${previous}`} />}
+              </span>
+            ))}
           </div>
         )}
       </div>
@@ -39,7 +117,7 @@ function ProjectCard({ project, number, onOpen }) {
 
   return (
     <Spotlight as="article" tilt className="project-card" style={{ '--accent': accent }} aria-labelledby={`p-${project.id}`}>
-      <Cover project={project} />
+      <Cover project={project} index={number} />
       <div className="project-body">
         <div className="project-top">
           <span className="icon-tile accent-tile" aria-hidden="true">
@@ -49,9 +127,15 @@ function ProjectCard({ project, number, onOpen }) {
             {String(number).padStart(2, '0')}
           </span>
         </div>
-        <h3 id={`p-${project.id}`}>{name}</h3>
-        <p className="tagline">{tagline}</p>
-        <p className="project-desc">{description}</p>
+        <h3 id={`p-${project.id}`}>
+          <Words>{name}</Words>
+        </h3>
+        <p className="tagline">
+          <Words>{tagline}</Words>
+        </p>
+        <p className="project-desc">
+          <Words step={14}>{description}</Words>
+        </p>
 
         <ul className="tech-list" aria-label="Technologies">
           {tech.map((t) => (
@@ -122,7 +206,7 @@ export default function Projects() {
       index={3}
       label="Projects"
       title={<>Selected <em>projects</em></>}
-      subtitle="AI/ML, real-time and full-stack work. Open a project for its screenshots and full feature list."
+      subtitle="AI/DS, real-time and full-stack work. Open a project for its screenshots and full feature list."
     >
       <Reveal className="filter-bar" role="group" aria-label="Filter projects by category">
         {projectFilters.map((f) => (

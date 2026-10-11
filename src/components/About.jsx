@@ -2,6 +2,7 @@ import { GraduationCap } from 'lucide-react'
 import Section from './Section.jsx'
 import Reveal from './Reveal.jsx'
 import Spotlight from './Spotlight.jsx'
+import Words from './Words.jsx'
 import { education, focusAreas, summary } from '../data/content.js'
 
 export default function About() {
@@ -15,7 +16,7 @@ export default function About() {
       <div className="about-grid">
         <div className="about-main">
           <Reveal as="p" className="lead">
-            {summary}
+            <Words>{summary}</Words>
           </Reveal>
           <ul className="focus-grid">
             {focusAreas.map(({ icon: Icon, title, text }, i) => (
@@ -24,8 +25,12 @@ export default function About() {
                   <span className="icon-tile" aria-hidden="true">
                     <Icon size={20} />
                   </span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
+                  <h3>
+                    <Words>{title}</Words>
+                  </h3>
+                  <p>
+                    <Words>{text}</Words>
+                  </p>
                 </Spotlight>
               </Reveal>
             ))}
@@ -45,8 +50,12 @@ export default function About() {
                     <span className="mono">{item.period}</span>
                     <span className="tag">{item.tag}</span>
                   </div>
-                  <h4>{item.school}</h4>
-                  <p>{item.program}</p>
+                  <h4>
+                    <Words>{item.school}</Words>
+                  </h4>
+                  <p>
+                    <Words>{item.program}</Words>
+                  </p>
                 </Spotlight>
               </Reveal>
             ))}

@@ -15,6 +15,7 @@ import {
   HeartPulse,
   Layers,
   Palette,
+  Rocket,
   ScanEye,
   ScanSearch,
   Terminal,
@@ -33,10 +34,10 @@ import { GithubIcon } from '../components/Icons.jsx'
 // ---------------------------------------------------------------------------
 
 export const summary =
-  'Artificial Intelligence and Data Science student with experience in developing AI/ML, data-driven, web, and software-based projects. Passionate about problem-solving, hackathons, and building practical technology solutions. Experienced in Python, machine learning, data analysis, databases, APIs, cloud platforms, and modern development tools.'
+  'Artificial Intelligence and Data Science student with experience in developing AI/DS, data-driven, web, and software-based projects. Passionate about problem-solving, hackathons, and building practical technology solutions. Experienced in Python, machine learning, data analysis, databases, APIs, cloud platforms, and modern development tools.'
 
 export const focusAreas = [
-  { icon: Brain, title: 'AI / ML', text: 'Machine learning, computer vision and data analysis.' },
+  { icon: Brain, title: 'AI / DS', text: 'Data science, machine learning and AI-powered data analysis.' },
   { icon: BarChart3, title: 'Data-driven apps', text: 'Applications that turn data into useful decisions.' },
   { icon: Globe2, title: 'Web & software', text: 'Full-stack products with APIs, databases and cloud services.' },
   { icon: Workflow, title: 'Hackathons', text: 'Building practical solutions to real-world problems.' },
@@ -84,11 +85,12 @@ export const skillGroups = [
     skills: [
       { name: 'MySQL', icon: Database },
       { name: 'MongoDB', icon: Layers },
+      { name: 'Supabase', icon: Zap },
     ],
   },
   {
     id: 'ai-ml',
-    title: 'AI / ML',
+    title: 'AI / DS',
     icon: Brain,
     skills: [
       { name: 'Machine Learning', icon: Brain },
@@ -104,6 +106,7 @@ export const skillGroups = [
       { name: 'Git', icon: GitBranch },
       { name: 'GitHub', icon: GithubIcon },
       { name: 'VS Code', icon: Braces },
+      { name: 'Antigravity', icon: Rocket },
     ],
   },
   {
@@ -118,7 +121,7 @@ export const skillGroups = [
   },
 ]
 
-export const projectFilters = ['All', 'AI / ML', 'Full-Stack', 'Real-time', 'Web']
+export const projectFilters = ['All', 'AI / DS', 'Full-Stack', 'Real-time', 'Web']
 
 // Screenshots live in /public/projects/. A missing file just shows a labelled placeholder.
 // Set `links.repo` / `links.live` to a real URL to enable those buttons.
@@ -158,7 +161,7 @@ export const projects = [
     tagline: 'Smart Emergency Vehicle Priority System',
     icon: Ambulance,
     accent: '#d4af37',
-    categories: ['Full-Stack', 'Real-time', 'AI / ML'],
+    categories: ['Full-Stack', 'Real-time', 'AI / DS'],
     tech: ['Django', 'DRF', 'Django Channels', 'PostgreSQL/PostGIS', 'React', 'Docker'],
     description:
       'Developed a real-time emergency vehicle platform providing ambulance traffic-signal priority, fastest routing over PostGIS spatial data, and live hospital readiness tracking. Included admin, driver, paramedic, and hospital dashboards with WebSocket updates, push notifications, and explainable ML estimators.',
@@ -185,7 +188,7 @@ export const projects = [
     tagline: 'Multi-Agent Rural Health Warning System',
     icon: HeartPulse,
     accent: '#e8c14f',
-    categories: ['Full-Stack', 'Real-time', 'AI / ML'],
+    categories: ['Full-Stack', 'Real-time', 'AI / DS'],
     tech: ['React', 'TypeScript', 'Django REST', 'PostgreSQL', 'Django Channels', 'WebSockets'],
     description:
       'Developed a multi-agent rural healthcare platform connecting ASHA/health-worker observations with community-level early-warning intelligence. Combined individual RuralCare decision support, multi-source signal correlation, deterministic safety verification, real-time dashboards, and human-led investigation.',
@@ -197,7 +200,13 @@ export const projects = [
       'Human-led investigation workflow.',
     ],
     links: { repo: '', live: '' },
-    screenshots: [],
+    screenshots: [
+      shot('gramsentinel-worker-portal.webp', 'RuralCare worker portal: assessments, triage and community symptom summary'),
+      shot('gramsentinel-overview.webp', 'Platform overview: patients, assessments, reports and alerts by village'),
+      shot('gramsentinel-alerts.webp', 'Alerts: signal, severity, safety check, evidence sources, status and outcome'),
+      shot('gramsentinel-evidence.webp', 'Source-by-source evidence: CHW, lab, pharmacy, PHC, school and weather'),
+      shot('gramsentinel-signals.webp', 'Community health signals by category, with recent activity'),
+    ],
   },
   {
     id: 'eventflow',
@@ -205,7 +214,7 @@ export const projects = [
     tagline: 'Intelligent College Event Management Platform',
     icon: CalendarCheck,
     accent: '#c9a227',
-    categories: ['Web', 'AI / ML'],
+    categories: ['Web', 'AI / DS'],
     tech: ['JavaScript', 'SQL', 'CSS', 'HTML', 'Markdown', 'JSON'],
     description:
       'Built a centralized platform for college events, registrations, and participants with QR-based attendance, scheduling, team management, certificates, and feedback. Integrated AI-powered event planning, recommendations, analytics, and responsive role-based access for students, organizers, and administrators.',
@@ -232,7 +241,7 @@ export const projects = [
     tagline: 'AI-Powered Road Damage Detection & Safer Route Recommendation',
     icon: ScanSearch,
     accent: '#f7dc7a',
-    categories: ['AI / ML'],
+    categories: ['AI / DS'],
     tech: ['Python', 'Computer Vision', 'Machine Learning', 'GIS'],
     description:
       'Built an AI-powered road intelligence platform that detects and classifies road damage from images, predicts future deterioration, assesses severity, prioritizes maintenance, and visualizes road conditions on an interactive map. Recommends safer alternative routes using road-risk data.',
@@ -245,7 +254,11 @@ export const projects = [
       'Safer route recommendations.',
     ],
     links: { repo: '', live: '' },
-    screenshots: [],
+    screenshots: [
+      shot('roadmind-welcome.webp', 'Welcome: choose the user app or the admin and road maintenance portal'),
+      shot('roadmind-route.webp', 'Plan a safer route: compare live traffic, road condition and predicted risk on the map'),
+      shot('roadmind-report.webp', 'Report a road problem: pothole, crack, flooding, accident, blocked road and more'),
+    ],
   },
 ]
 

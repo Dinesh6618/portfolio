@@ -1,0 +1,184 @@
+/* Holographic code-editor blob on the name. Black and gold only:
+   #F4EFE2 resting text, #F2CF5B code + rim, #D4AF37 code + chip lines, #A9831F line numbers + body, #FFF8C9 highlights.
+
+   Where the cursor is, a wide blob of light spreads out from it with a living, wavy edge and a glowing gold
+   rim. Inside the blob every letter is the hologram (a code editor over a chip layout, scrolling at two
+   depths); outside it the real ivory letter shows. The real text is never removed: it is only clipped.
+   The hologram layers are clipped to the glyph (background-clip: text) and to the blob, so nothing can
+   appear outside a letter shape.
+
+   Variables, set by HolographicName.jsx:
+     on the heading:  --mx / --my  the cursor, relative to the name        --rad  mean radius of the blob (px)
+                      --w1 / --w2  radii of the two ripple rings           --a1 / --a2  their brightness
+                      --lit        0..1 how lit the area is                --spot  cursor light amount
+                      --spot-r     radius of the cursor light
+     on each letter:  --lx         the letter's left offset inside the name
+                      --cp-in      clip path: the blob
+                      --cp-out     clip path: everything except the blob
+                      --cp-rim     clip path: a thin band along the blob's edge                           */
+
+.holographic {
+  cursor: default;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.holographic:focus {
+  outline: none;
+}
+
+.holographic:focus-visible {
+  outline: 2px solid #f2cf5b;
+  outline-offset: 10px;
+  border-radius: 4px;
+}
+
+.holographic .ch {
+  isolation: isolate;
+}
+
+/* the real letter: cut away where the blob is, whole everywhere else */
+.holographic .ch-face {
+  position: relative;
+  z-index: 1;
+  clip-path: var(--cp-out, none);
+}
+
+/* ---- duplicate glyph layers (aria-hidden, same box and font as the real letter) ---- */
+.ch-holo {
+  position: absolute;
+  inset: 0;
+  padding: 0.02em 0 0.03em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  white-space: nowrap;
+  opacity: 0;
+  /* visible only inside the blob (an empty clip when the blob does not reach this letter) */
+  clip-path: var(--cp-in, inset(50%));
+}
+
+/* A code editor over a chip layout, filling the glyph. Four stacked backgrounds, top to bottom:
+     scanlines
+     near layer: editor, with line numbers and code lines (each line stretched to the full tile width)
+     far layer:  larger, dimmer chip floor-plan with blocks, hatching, traces and labels
+     body:       dark gold wash
+   The near layer scrolls faster than the far one, so the code seems to sit in front of the chip: depth. */
+.ch-holo--code {
+  z-index: 2;
+  background-image:
+    repeating-linear-gradient(180deg, rgba(5, 5, 5, 0.38) 0 1px, rgba(5, 5, 5, 0) 1px 3px),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><g font-family='ui-monospace,Consolas,Menlo,monospace' font-size='10' font-weight='600'><g fill='%23A9831F'><text x='2' y='12'>01</text><text x='2' y='25'>02</text><text x='2' y='38'>03</text><text x='2' y='51'>04</text><text x='2' y='64'>05</text><text x='2' y='77'>06</text><text x='2' y='90'>07</text><text x='2' y='103'>08</text><text x='2' y='116'>09</text></g><path d='M17 0V120' stroke='%23A9831F' stroke-opacity='.7' stroke-width='1'/><text x='20' y='12' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23F2CF5B'>const dg = {</text><text x='20' y='25' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23D4AF37'>ai: true,</text><text x='20' y='38' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23F2CF5B'>ml: 0x1F,</text><text x='20' y='51' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23D4AF37'>};</text><text x='20' y='64' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23F2CF5B'>fn run(x){</text><text x='20' y='77' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23D4AF37'>return x*2;</text><text x='20' y='90' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23F2CF5B'>}</text><text x='20' y='103' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23D4AF37'>/* AI/DS */</text><text x='20' y='116' textLength='96' lengthAdjust='spacingAndGlyphs' fill='%23F2CF5B'>if(ok)go();</text></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><defs><pattern id='h' width='4' height='4' patternUnits='userSpaceOnUse'><path d='M4 0V4M0 4H4' stroke='%23D4AF37' stroke-opacity='.4' stroke-width='.6' fill='none'/></pattern></defs><g fill='url(%23h)'><rect x='4' y='56' width='72' height='28'/><rect x='84' y='38' width='34' height='38'/><rect x='4' y='92' width='44' height='64'/></g><g fill='none' stroke='%23D4AF37' stroke-opacity='.85' stroke-width='1'><rect x='4' y='4' width='72' height='44'/><rect x='84' y='4' width='72' height='26'/><rect x='84' y='38' width='34' height='38'/><rect x='124' y='38' width='32' height='38'/><rect x='4' y='56' width='72' height='28'/><rect x='4' y='92' width='44' height='64'/><rect x='56' y='92' width='100' height='64'/></g><g fill='none' stroke='%23F2CF5B' stroke-opacity='.9' stroke-width='1.2'><path d='M40 48V56M120 30V38M100 76V92M140 76V92M76 70H84M30 84V92M76 124H56'/><path d='M62 104H110V132H148'/></g><g fill='%23F2CF5B'><circle cx='40' cy='52' r='2'/><circle cx='120' cy='34' r='2'/><circle cx='62' cy='104' r='2'/><circle cx='148' cy='132' r='2'/></g><g font-family='ui-monospace,Consolas,Menlo,monospace' font-size='9' font-weight='700' fill='%23F2CF5B'><text x='9' y='19'>DDR</text><text x='89' y='20'>SENSE</text><text x='88' y='54'>NPU</text><text x='129' y='54'>PMU</text><text x='9' y='72'>ALU</text><text x='9' y='108'>L2</text><text x='61' y='108'>L3 CACHE</text><text x='61' y='148'>I/O 0x1F</text></g></svg>"),
+    linear-gradient(180deg, rgba(212, 175, 55, 0.5), rgba(169, 131, 31, 0.3));
+  background-size:
+    100% 100%,
+    max(0.3em, 72px) max(0.3em, 72px),
+    max(0.6em, 150px) max(0.6em, 150px),
+    100% 100%;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: var(--lit, 0);
+}
+
+.holographic.is-holo .ch-holo--code {
+  animation: holo-scroll 8s linear infinite;
+}
+
+@keyframes holo-scroll {
+  to {
+    background-position:
+      0 0,
+      0 calc(max(0.3em, 72px) * -2),
+      calc(max(0.6em, 150px) * -1) calc(max(0.6em, 150px) * -1),
+      0 0;
+  }
+}
+
+/* a very thin gold outline: under 1px of it sits outside the glyph, so the effect stays inside the letter */
+.ch-holo--edge {
+  z-index: 3;
+  -webkit-text-stroke: 0.0038em rgba(242, 207, 91, 0.95);
+  opacity: var(--lit, 0);
+}
+
+/* round ripples travelling out from the cursor to the edge of the blob, only inside the letters */
+.ch-holo--beam {
+  z-index: 4;
+  background-image:
+    radial-gradient(
+      circle at calc(var(--mx, -999px) - var(--lx, 0px)) var(--my, 0px),
+      rgba(255, 248, 201, 0) calc(var(--w1, 0px) - 14px),
+      rgba(255, 248, 201, var(--a1, 0)) calc(var(--w1, 0px) - 2px),
+      rgba(255, 248, 201, 0) calc(var(--w1, 0px) + 6px)
+    ),
+    radial-gradient(
+      circle at calc(var(--mx, -999px) - var(--lx, 0px)) var(--my, 0px),
+      rgba(242, 207, 91, 0) calc(var(--w2, 0px) - 14px),
+      rgba(242, 207, 91, var(--a2, 0)) calc(var(--w2, 0px) - 2px),
+      rgba(242, 207, 91, 0) calc(var(--w2, 0px) + 6px)
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: var(--lit, 0);
+}
+
+/* the glowing gold rim along the living edge of the blob */
+.ch-holo--rim {
+  z-index: 5;
+  background-image: linear-gradient(135deg, #fff8c9 0%, #f2cf5b 45%, #d4af37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  clip-path: var(--cp-rim, inset(50%));
+  opacity: var(--lit, 0);
+}
+
+/* soft light at the cursor, only inside the blob and the letters */
+.ch-holo--spot {
+  z-index: 6;
+  background-image: radial-gradient(
+    circle var(--spot-r, 110px) at calc(var(--mx, -999px) - var(--lx, 0px)) var(--my, 0px),
+    rgba(255, 248, 201, 0.5) 0%,
+    rgba(242, 207, 91, 0.2) 45%,
+    rgba(242, 207, 91, 0) 100%
+  );
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: var(--spot, 0);
+}
+
+/* the layers stay hidden while the letters are still decoding in */
+.ch[data-s='pending'] .ch-holo,
+.ch[data-s='running'] .ch-holo {
+  visibility: hidden;
+}
+
+/* reduced motion: the blob appears at once where the pointer is and stays still */
+@media (prefers-reduced-motion: reduce) {
+  .holographic.is-holo .ch-holo--code {
+    animation: none;
+  }
+  .ch-holo--beam,
+  .ch-holo--spot {
+    display: none;
+  }
+}
+
+/* printing: plain text only */
+@media print {
+  .ch-holo {
+    display: none !important;
+  }
+  .holographic .ch-face {
+    clip-path: none !important;
+  }
+}

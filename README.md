@@ -38,12 +38,13 @@ npm run preview    # serve the production build locally
 
 ### Project screenshots
 
-Screenshots for CLICK, SEVPS and EventFlow are already in `public/projects/` (compressed WebP, with the slideshow caption bar trimmed from the CLICK shots). To replace or add one, drop a file with the same name there. Any file that is missing is skipped, and a project with no screenshots (GramSentinel, RoadMind AI) shows a "Screenshots coming soon" placeholder.
+Screenshots for CLICK, SEVPS, GramSentinel and EventFlow are already in `public/projects/` (compressed WebP, with the slideshow caption bar trimmed from the CLICK shots). To replace or add one, drop a file with the same name there. Any file that is missing is skipped, and a project with no screenshots (RoadMind AI) shows a "Screenshots coming soon" placeholder.
 
 | Project | Files |
 | --- | --- |
 | CLICK | `click-home.webp`, `click-lesson.webp`, `click-fill-code.webp`, `click-test-complete.webp`, `click-practice.webp` |
 | SEVPS | `sevps-operations-map.webp`, `sevps-analytics.webp`, `sevps-hospital.webp`, `sevps-paramedic.webp`, `sevps-driver.webp` |
+| GramSentinel | `gramsentinel-worker-portal.webp`, `gramsentinel-overview.webp`, `gramsentinel-alerts.webp`, `gramsentinel-evidence.webp`, `gramsentinel-signals.webp` |
 | EventFlow | `eventflow-landing.webp`, `eventflow-explore.webp`, `eventflow-student-home.webp`, `eventflow-event-details.webp`, `eventflow-organizer-dashboard.webp` |
 
 The first image of each project is its card cover. To use a different filename or format, edit the `shot(...)` lines in `src/data/content.js`.

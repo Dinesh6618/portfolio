@@ -1,0 +1,77 @@
+/* Combined cursor effects. Black and gold only: #D4AF37 gold, #FFD76A bright gold, rgba(255, 190, 50, 0.6) glow.
+   Everything here is decoration: no pointer events, nothing that can change layout. */
+
+.cursor-fx {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482990; /* under the cursor ring (2147483000), over the page and the section transitions */
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* the hovered element's glow: a frame that glides between interactive elements */
+.hover-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2147482980;
+  width: 0;
+  height: 0;
+  border: 1px solid rgba(255, 215, 106, 0.55);
+  border-radius: 6px;
+  background: radial-gradient(120% 140% at 50% 50%, rgba(255, 190, 50, 0.1), rgba(255, 190, 50, 0) 70%);
+  box-shadow:
+    0 0 0 1px rgba(212, 175, 55, 0.18),
+    0 0 18px rgba(255, 190, 50, 0.38),
+    0 0 46px -6px rgba(255, 190, 50, 0.3);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, width, height, opacity;
+  transition:
+    opacity 0.22s ease,
+    width 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.22s ease;
+}
+
+.hover-glow[data-on='true'] {
+  opacity: 1;
+}
+
+/* the first placement jumps straight onto the element instead of gliding in from the corner */
+.hover-glow[data-fresh='true'] {
+  transition: opacity 0.22s ease;
+}
+
+/* not over text fields, and not while a dialog is open (dialogs sit in the browser's top layer) */
+html:has(dialog[open]) .hover-glow,
+html:has(dialog[open]) .cursor-fx {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-fx {
+    display: none;
+  }
+  .hover-glow,
+  .hover-glow[data-fresh='true'] {
+    transition: opacity 0.01s linear;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-fx,
+  .hover-glow {
+    display: none;
+  }
+}
+
+@media print {
+  .cursor-fx,
+  .hover-glow {
+    display: none;
+  }
+}

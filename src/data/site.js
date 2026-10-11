@@ -6,14 +6,15 @@ import { GithubIcon, LinkedinIcon } from '../components/Icons.jsx'
 
 export const site = {
   name: 'Dinesh G',
-  roleParts: ['Artificial Intelligence & Data Science Student', 'AI/ML', 'Software Development'],
+  status: { left: "CHENNAI, INDIA — PORTFOLIO '26", right: 'OPEN TO INTERNSHIPS & COLLABORATIONS' },
+  // [lead words, italic accent words]
+  roleLine: [['Full Stack Developer &', 'AI Engineer']],
   intro:
-    'I am an Artificial Intelligence and Data Science student passionate about AI/ML, data-driven applications, web development, and software engineering. I enjoy solving real-world problems, building practical technology solutions, and participating in hackathons and innovative projects.',
+    'I am an Artificial Intelligence and Data Science student passionate about Data Science, data-driven applications, web development, and software engineering. I enjoy solving real-world problems, building practical technology solutions, and participating in hackathons and innovative projects.',
   email: 'dineshsekar6618@gmail.com',
   phone: '9597026618',
   phoneHref: '+919597026618', // assumes an Indian (+91) number
   location: 'Chennai, India',
-  coords: '13.08°N 80.27°E', // Chennai, shown as a small technical detail in the hero
   timeZone: 'Asia/Kolkata',
   resume: { href: '/resume.pdf', filename: 'Dinesh_G_Resume.pdf' },
   // Front-page photo. Replace public/profile.webp (keep width/height in sync with the new file).
@@ -36,6 +37,7 @@ export const navLinks = [
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
+  { id: 'research', label: 'Research' },
   { id: 'experience', label: 'Experience' },
   { id: 'achievements', label: 'Achievements' },
   { id: 'contact', label: 'Contact' },

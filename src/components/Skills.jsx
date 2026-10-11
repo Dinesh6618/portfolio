@@ -1,6 +1,7 @@
 import Section from './Section.jsx'
 import Reveal from './Reveal.jsx'
 import Spotlight from './Spotlight.jsx'
+import Words from './Words.jsx'
 import { skillGroups } from '../data/content.js'
 
 export default function Skills() {
@@ -20,7 +21,9 @@ export default function Skills() {
                 <span className="icon-tile" aria-hidden="true">
                   <GroupIcon size={20} />
                 </span>
-                <h3>{title}</h3>
+                <h3>
+                  <Words>{title}</Words>
+                </h3>
               </div>
               <ul className="chip-list">
                 {skills.map(({ name, icon: Icon }) => (

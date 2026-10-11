@@ -1,0 +1,341 @@
+/* Research papers: editorial publication list. Each paper is a row with a left rail (number, status, venue) and a
+   main column (title, authors, abstract, figure, contributions). Flat on the page, separated by hairlines.
+   Black and gold, same palette as the rest of the site. Everything is scoped to .papers / .paper. */
+
+.papers {
+  display: grid;
+  border-top: 1px solid rgba(212, 175, 55, 0.34);
+}
+
+.paper {
+  --rs-ink: #f4efe2;
+  --rs-ink-2: #aaa28d;
+  --rs-accent: #d4af37;
+  --rs-accent-text: #f2cf5b; /* brighter gold for small text */
+  --rs-line: rgba(212, 175, 55, 0.22);
+  --rs-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 30px);
+  padding: clamp(28px, 4.4vw, 60px) 0;
+  border-bottom: 1px solid var(--rs-line);
+  color: var(--rs-ink);
+}
+
+/* ---- left rail */
+.paper-rail {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+  padding-left: 16px;
+  border-left: 2px solid var(--rs-accent);
+}
+
+.paper-no {
+  margin: 0;
+  color: var(--rs-accent-text);
+  font-family: var(--font-condensed);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  letter-spacing: 0.07em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.paper-status {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+/* status badge: a flat pill with a status dot (solid for under review, hollow and dashed for in preparation) */
+.stamp {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 7px 14px;
+  border: 1px solid var(--rs-accent);
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--rs-accent-text);
+}
+
+.stamp::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rs-accent);
+  box-shadow: 0 0 10px rgba(255, 190, 50, 0.7);
+}
+
+.stamp-label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+.stamp-sub {
+  color: var(--rs-ink-2);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+
+.stamp--prep {
+  border-style: dashed;
+  border-color: var(--rs-ink-2);
+  background: transparent;
+  color: var(--rs-ink-2);
+}
+
+.stamp--prep::before {
+  background: transparent;
+  border: 1.5px solid var(--rs-ink-2);
+  box-shadow: none;
+}
+
+.paper-ref {
+  margin: 0;
+  color: var(--rs-ink-2);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* venue: one line per item, the conference name emphasised */
+.paper-meta {
+  padding-top: 14px;
+  border-top: 1px solid var(--rs-line);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.paper-conf {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  color: var(--rs-ink-2);
+  line-height: 1.5;
+}
+
+.paper-conf .conf-strong {
+  color: var(--rs-ink);
+  font-weight: 600;
+}
+
+.paper-conf .dot {
+  display: none;
+}
+
+/* ---- main column */
+.paper-main {
+  min-width: 0;
+}
+
+.paper-title {
+  max-width: 30ch;
+  margin: 0;
+  color: var(--rs-ink);
+  font-family: var(--rs-serif);
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  overflow-wrap: break-word;
+}
+
+.paper-authors {
+  margin: clamp(14px, 1.8vw, 22px) 0 0;
+  color: var(--rs-ink-2);
+  font-size: clamp(0.95rem, 1.2vw, 1.0625rem);
+  line-height: 1.55;
+  overflow-wrap: break-word;
+}
+
+/* words are inline-blocks, which do not inherit an underline, so each word carries its own */
+.paper-authors .me,
+.paper-authors .me .w {
+  color: var(--rs-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--rs-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.paper-desc {
+  max-width: 62ch;
+  margin: clamp(16px, 2vw, 24px) 0 0;
+  color: var(--rs-ink-2);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.paper-body {
+  display: grid;
+  gap: clamp(24px, 3.4vw, 38px);
+  margin-top: clamp(24px, 3.4vw, 40px);
+  min-width: 0;
+}
+
+/* section labels: ABSTRACT ———— */
+.paper-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 14px;
+  color: var(--rs-accent-text);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.paper-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rs-line);
+}
+
+/* abstract: set off with a gold rule instead of a drop cap */
+.paper-abstract {
+  max-width: 74ch;
+  margin: 0;
+  padding-left: 18px;
+  border-left: 2px solid var(--rs-line);
+  color: var(--rs-ink);
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  line-height: 1.75;
+}
+
+.paper-abstract .dropcap {
+  display: inline;
+}
+
+/* figure + caption */
+.paper-caption,
+.paper-figure figcaption {
+  margin: 0;
+  color: var(--rs-ink-2);
+  font-family: var(--rs-serif);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.paper-figure {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.paper-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #140e0a;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.3);
+}
+
+.fig-no {
+  color: var(--rs-accent-text);
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+/* contributions: numbered tiles */
+.contrib {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contrib li {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 16px 16px 18px;
+  border: 1px solid var(--rs-line);
+  border-radius: 8px;
+  background: rgba(212, 175, 55, 0.04);
+}
+
+.contrib-no {
+  color: var(--rs-accent);
+  font-family: var(--rs-serif);
+  font-size: 1.6rem;
+  font-style: italic;
+  line-height: 1;
+}
+
+.contrib-text {
+  min-width: 0;
+  color: var(--rs-ink);
+  font-size: clamp(0.96rem, 1.15vw, 1.04rem);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* wide screens: the rail sits to the left and stays in view while the paper scrolls past */
+@media (min-width: 900px) {
+  .paper {
+    grid-template-columns: minmax(190px, 240px) minmax(0, 1fr);
+    column-gap: clamp(36px, 5vw, 84px);
+  }
+
+  .paper-rail {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+    align-self: start;
+  }
+}
+
+/* narrower screens: the rail becomes a compact header row above the paper */
+@media (max-width: 899px) {
+  .paper-rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 18px;
+    padding-left: 14px;
+  }
+
+  .paper-status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+  }
+
+  .paper-meta {
+    flex-basis: 100%;
+    padding-top: 12px;
+  }
+}
+
+/* decode effect on the paper: scrambling glyphs in bright gold */
+.paper .w-xs {
+  color: var(--rs-accent-text);
+}

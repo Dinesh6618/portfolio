@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Mail } from 'lucide-react'
 import { activeSocials, navLinks, site } from '../data/site.js'
+import useFitText from '../hooks/useFitText.js'
 
 const clock = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: site.timeZone })
 
 export default function Footer() {
   const [time, setTime] = useState(() => clock.format(new Date()))
+  const markBoxRef = useRef(null)
+  const markTextRef = useRef(null)
+  useFitText(markBoxRef, markTextRef)
 
   useEffect(() => {
     const id = setInterval(() => setTime(clock.format(new Date())), 30000)
@@ -56,8 +60,10 @@ export default function Footer() {
           {site.location.split(',')[0]} · {time} IST
         </p>
       </div>
-      <div className="footer-mark" aria-hidden="true">
-        DINESH G
+      <div className="container-wide">
+        <div ref={markBoxRef} className="footer-mark" aria-hidden="true">
+          <span ref={markTextRef}>DINESH G</span>
+        </div>
       </div>
     </footer>
   )

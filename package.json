@@ -2,7 +2,7 @@
   "name": "dinesh-portfolio",
   "private": true,
   "version": "1.0.0",
-  "description": "Personal portfolio of Dinesh G — AI & Data Science student, AI/ML and software development.",
+  "description": "Personal portfolio of Dinesh G — AI & Data Science student, AI/DS and software development.",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -2,13 +2,14 @@ import { Medal, Trophy } from 'lucide-react'
 import Section from './Section.jsx'
 import Reveal from './Reveal.jsx'
 import Spotlight from './Spotlight.jsx'
+import Words from './Words.jsx'
 import { achievements } from '../data/content.js'
 
 export default function Achievements() {
   return (
     <Section
       id="achievements"
-      index={5}
+      index={6}
       label="Achievements"
       title={<>Hackathons &amp; <em>achievements</em></>}
     >
@@ -23,8 +24,12 @@ export default function Achievements() {
                 <span className="badge">
                   <Medal size={14} aria-hidden="true" /> {badge}
                 </span>
-                <h3>{event}</h3>
-                <p>{text}</p>
+                <h3>
+                  <Words>{event}</Words>
+                </h3>
+                <p>
+                  <Words delay={120}>{text}</Words>
+                </p>
               </div>
             </Spotlight>
           </Reveal>

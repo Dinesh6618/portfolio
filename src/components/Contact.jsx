@@ -190,7 +190,7 @@ export default function Contact() {
   return (
     <Section
       id="contact"
-      index={6}
+      index={7}
       label="Contact"
       title={<>Let&apos;s build something <em>together</em></>}
       subtitle="Reach out about internships, hackathons or software projects. Email is the quickest way to get me."

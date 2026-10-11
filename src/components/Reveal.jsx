@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { whenIntroDone } from '../lib/intro.js'
 
 // Fades/slides its children in once, the first time they scroll into view.
 // The motion itself lives in CSS so prefers-reduced-motion can switch it off.
@@ -12,17 +13,21 @@ export default function Reveal({ as: Tag = 'div', delay = 0, className = '', sty
       setShown(true)
       return undefined
     }
+    let cancelWait = () => {}
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setShown(true)
           observer.disconnect()
+          cancelWait = whenIntroDone(() => setShown(true)) // waits while the intro loader is up
         }
       },
       { threshold: 0.1, rootMargin: '0px 0px -6% 0px' },
     )
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      cancelWait()
+    }
   }, [])
 
   return (

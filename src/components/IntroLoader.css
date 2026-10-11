@@ -1,0 +1,204 @@
+/* Intro loader: golden text reveal on pure black. #030303 background, #D4AF37 gold, #FFD76A highlight,
+   #FF9D00 amber glow. The letters gather from particles (canvas, see IntroLoader.jsx) and are unmasked left to
+   right; every animation starts when the font is ready (.is-go) so the letters never reflow mid-reveal. */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  overflow: hidden;
+  background: #030303;
+  color: #f5f5f5;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.intro.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.is-intro,
+html.is-intro body {
+  overflow: hidden;
+}
+
+.intro-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ---- DINESH G ---- */
+.intro-title {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 4vw;
+  pointer-events: none;
+}
+
+.intro-name {
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  font-size: clamp(2.5rem, 11vw, 8.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  filter: drop-shadow(0 0 0.28em rgba(255, 157, 0, 0.3));
+}
+
+.intro.is-go .intro-name {
+  /* phase 6: a soft, continuous glow pulse once the title is complete */
+  animation: intro-pulse 3.4s ease-in-out 3.4s infinite;
+}
+
+.intro-gap {
+  display: inline-block;
+  width: 0.34em;
+}
+
+/* each letter: a metallic gold face with a shimmer band, unmasked from its left edge */
+.intro-ch {
+  display: inline-block;
+  background:
+    linear-gradient(105deg, rgba(255, 255, 255, 0) 36%, rgba(255, 252, 232, 0.95) 50%, rgba(255, 255, 255, 0) 64%) 150% 0 /
+      280% 100% no-repeat,
+    linear-gradient(180deg, #fff3c2 0%, #ffd76a 36%, #d4af37 68%, #a9831f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  clip-path: inset(-0.2em 100% -0.2em 0);
+  opacity: 0;
+}
+
+.intro.is-go .intro-ch {
+  animation:
+    intro-letter 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(0.75s + var(--n, 0) * 0.2s) forwards,
+    intro-shimmer 0.5s ease-in-out calc(2.6s + var(--n, 0) * 0.075s) 1 forwards;
+}
+
+@keyframes intro-letter {
+  to {
+    clip-path: inset(-0.2em -0.2em -0.2em 0);
+    opacity: 1;
+  }
+}
+
+/* one sweep across the whole title: each letter's band passes through in turn (0.8 s in total) */
+@keyframes intro-shimmer {
+  from {
+    background-position:
+      150% 0,
+      0 0;
+  }
+  to {
+    background-position:
+      -50% 0,
+      0 0;
+  }
+}
+
+@keyframes intro-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0.24em rgba(255, 157, 0, 0.26));
+  }
+  50% {
+    filter: drop-shadow(0 0 0.42em rgba(255, 157, 0, 0.5));
+  }
+}
+
+/* ---- the real progress bar, near the bottom ---- */
+.intro-bar {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(36px, 9vh, 90px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(480px, 78vw);
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+.intro.is-go .intro-bar {
+  animation: intro-bar-in 0.6s ease 0.4s forwards;
+}
+
+@keyframes intro-bar-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.intro-track {
+  flex: 1;
+  height: 10px;
+  padding: 2px;
+  border: 1px solid rgba(212, 175, 55, 0.8);
+  border-radius: 999px;
+  background: rgba(3, 3, 3, 0.7);
+  box-shadow: 0 0 16px rgba(255, 157, 0, 0.2);
+}
+
+.intro-fill {
+  position: relative;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff9d00 0%, #ffbf3d 55%, #ffd76a 100%);
+  box-shadow: 0 0 10px rgba(255, 157, 0, 0.5);
+}
+
+/* soft glow on the leading edge */
+.intro-fill::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -7px;
+  width: 16px;
+  height: 22px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 236, 170, 0.95), rgba(255, 157, 0, 0.35) 55%, rgba(255, 157, 0, 0));
+  pointer-events: none;
+}
+
+.intro-pct {
+  min-width: 3.3em;
+  color: #f5f5f5;
+  font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- reduced motion: the finished title at once, nothing moves ---- */
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    transition-duration: 0.2s;
+  }
+  .intro-ch,
+  .intro.is-go .intro-ch {
+    animation: none;
+    clip-path: none;
+    opacity: 1;
+  }
+  .intro-name,
+  .intro.is-go .intro-name {
+    animation: none;
+  }
+  .intro-bar,
+  .intro.is-go .intro-bar {
+    animation: none;
+    opacity: 1;
+  }
+}

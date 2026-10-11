@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { CornerDownLeft, Copy, Download, Hash, Mail, Search } from 'lucide-react'
 import { activeSocials, navLinks, site } from '../data/site.js'
 import { projects } from '../data/content.js'
+import { goToSection } from '../lib/transitions.js'
 
 function copyText(text) {
   if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text)
@@ -29,10 +30,7 @@ export default function CommandPalette() {
   const inputRef = useRef(null)
 
   const items = useMemo(() => {
-    const go = (id) => () => {
-      document.getElementById(id)?.scrollIntoView()
-      window.history.replaceState(null, '', `#${id}`)
-    }
+    const go = (id) => () => goToSection(id)
     const notify = (message) => {
       setToast(message)
       setTimeout(() => setToast(''), 2200)

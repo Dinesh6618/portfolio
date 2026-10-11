@@ -1,0 +1,127 @@
+/* Gold ring cursor. Black and gold only: #D4AF37 ring, #F2CF5B when it is over the name. */
+
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2147483000;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 1.5px solid #d4af37;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0);
+  box-shadow: 0 0 14px rgba(255, 190, 50, 0.28);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition:
+    opacity 0.2s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    width 0.25s ease,
+    height 0.25s ease,
+    margin 0.25s ease;
+}
+
+.cursor-ring[data-visible='true'] {
+  opacity: 1;
+}
+
+/* the dot: exactly on the pointer, a soft golden glow */
+.cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2147483001;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #ffd76a;
+  box-shadow:
+    0 0 6px 1px rgba(255, 215, 106, 0.9),
+    0 0 16px 3px rgba(255, 190, 50, 0.55);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition:
+    opacity 0.2s ease,
+    width 0.18s ease,
+    height 0.18s ease,
+    margin 0.18s ease;
+}
+
+.cursor-dot[data-visible='true'] {
+  opacity: 1;
+}
+
+.cursor-dot[data-state='link'] {
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+}
+
+.cursor-dot[data-pressed='true'] {
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+}
+
+/* over links, buttons and cards: a larger ring with a soft gold wash */
+.cursor-ring[data-state='link'] {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: #f2cf5b;
+}
+
+/* over the name: a brighter ring */
+.cursor-ring[data-state='name'] {
+  border-color: #f2cf5b;
+  box-shadow: 0 0 0 1px rgba(242, 207, 91, 0.25);
+}
+
+/* pressing: the ring tightens */
+.cursor-ring[data-pressed='true'] {
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+}
+
+/* the ring replaces the native pointer, except in text fields and while a dialog is open */
+html.has-cursor-ring,
+html.has-cursor-ring * {
+  cursor: none !important;
+}
+
+html.has-cursor-ring input,
+html.has-cursor-ring textarea,
+html.has-cursor-ring select,
+html.has-cursor-ring [contenteditable='true'] {
+  cursor: text !important;
+}
+
+html.has-cursor-ring:has(dialog[open]),
+html.has-cursor-ring:has(dialog[open]) * {
+  cursor: auto !important;
+}
+
+html.has-cursor-ring:has(dialog[open]) .cursor-ring,
+html.has-cursor-ring:has(dialog[open]) .cursor-dot,
+.cursor-ring[data-state='field'],
+.cursor-dot[data-state='field'] {
+  opacity: 0;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-ring,
+  .cursor-dot {
+    display: none;
+  }
+}
+
+@media print {
+  .cursor-ring,
+  .cursor-dot {
+    display: none;
+  }
+}

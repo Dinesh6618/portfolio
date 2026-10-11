@@ -1,6 +1,6 @@
 import { skillGroups } from '../data/content.js'
 
-const names = skillGroups.flatMap((group) => group.skills.map((skill) => skill.name))
+const names = [...new Set(skillGroups.flatMap((group) => group.skills.map((skill) => skill.name)))]
 
 // Decorative skills ticker. Two identical rows scroll -50% for a seamless loop.
 export default function Marquee() {

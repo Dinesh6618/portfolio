@@ -2,13 +2,14 @@ import { CalendarDays } from 'lucide-react'
 import Section from './Section.jsx'
 import Reveal from './Reveal.jsx'
 import Spotlight from './Spotlight.jsx'
+import Words from './Words.jsx'
 import { experience } from '../data/content.js'
 
 export default function Experience() {
   return (
     <Section
       id="experience"
-      index={4}
+      index={5}
       label="Experience"
       title={<>Internship <em>experience</em></>}
     >
@@ -22,8 +23,12 @@ export default function Experience() {
                   <Icon size={24} />
                 </span>
                 <div>
-                  <h3>{role}</h3>
-                  <p className="company">{company}</p>
+                  <h3>
+                    <Words>{role}</Words>
+                  </h3>
+                  <p className="company">
+                    <Words delay={120}>{company}</Words>
+                  </p>
                 </div>
                 <p className="date-range">
                   <CalendarDays size={15} aria-hidden="true" />
@@ -32,7 +37,9 @@ export default function Experience() {
               </div>
               <ul className="bullets">
                 {points.map((point) => (
-                  <li key={point}>{point}</li>
+                  <li key={point}>
+                    <Words>{point}</Words>
+                  </li>
                 ))}
               </ul>
             </Spotlight>

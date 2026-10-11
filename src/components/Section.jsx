@@ -1,4 +1,5 @@
 import Reveal from './Reveal.jsx'
+import Words from './Words.jsx'
 
 // Shared section shell: numbered kicker, heading and optional subtitle.
 export default function Section({ id, index, label, title, subtitle, className = '', children }) {
@@ -12,10 +13,16 @@ export default function Section({ id, index, label, title, subtitle, className =
       <div className="container">
         <Reveal className="section-head">
           <p className="kicker">
-            <span>{String(index).padStart(2, '0')}</span> / {label}
+            <span>{String(index).padStart(2, '0')}</span> / <Words>{label}</Words>
           </p>
-          <h2 id={`${id}-title`}>{title}</h2>
-          {subtitle && <p className="section-sub">{subtitle}</p>}
+          <h2 id={`${id}-title`}>
+            <Words>{title}</Words>
+          </h2>
+          {subtitle && (
+            <p className="section-sub">
+              <Words delay={150}>{subtitle}</Words>
+            </p>
+          )}
         </Reveal>
         {children}
       </div>
