@@ -1,9 +1,11 @@
-import { GraduationCap } from 'lucide-react'
+import { Camera, GraduationCap } from 'lucide-react'
 import Section from './Section.jsx'
 import Reveal from './Reveal.jsx'
 import Spotlight from './Spotlight.jsx'
 import Words from './Words.jsx'
-import { education, focusAreas, summary } from '../data/content.js'
+import { aboutPhotos, education, focusAreas, summary } from '../data/content.js'
+import MomentsDeck from './MomentsDeck.jsx'
+import './AboutPhotos.css'
 
 export default function About() {
   return (
@@ -62,6 +64,11 @@ export default function About() {
           </ol>
         </div>
       </div>
+
+      <Reveal as="h3" className="subhead moments-head">
+        <Camera size={18} aria-hidden="true" /> Moments
+      </Reveal>
+      <MomentsDeck photos={aboutPhotos} />
     </Section>
   )
 }

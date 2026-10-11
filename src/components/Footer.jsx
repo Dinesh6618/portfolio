@@ -26,7 +26,7 @@ export default function Footer() {
             </span>
             <span className="brand-name">Dinesh G</span>
           </a>
-          <p>AI &amp; Data Science student building practical technology.</p>
+          <p>Artificial Intelligence &amp; Data Science building practical technology.</p>
         </div>
 
         <nav className="footer-nav" aria-label="Footer">

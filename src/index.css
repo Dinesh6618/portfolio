@@ -3139,3 +3139,30 @@ html.is-intro .reveal-now {
     transition: opacity 0.01s linear;
   }
 }
+
+/* 13. Phone comfort ------------------------------------------------------- */
+/* Touch screens: 16px form text (iOS zooms the page on focus below that) and 44px tap areas for the contact
+   links, using padding with an equal negative margin so the layout does not move. */
+@media (pointer: coarse), (max-width: 899px) {
+  input,
+  textarea,
+  select,
+  .palette-search input {
+    font-size: max(16px, 1rem);
+  }
+
+  .contact-text a {
+    padding-block: 9px;
+    margin-block: -9px;
+  }
+}
+
+/* small screens: nothing set below 12px */
+@media (max-width: 899px) {
+  .stats span,
+  .tag,
+  .badge,
+  .paper .paper-ref {
+    font-size: 0.75rem;
+  }
+}

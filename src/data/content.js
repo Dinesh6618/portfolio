@@ -42,6 +42,26 @@ export const focusAreas = [
   { icon: Workflow, title: 'Hackathons', text: 'Building practical solutions to real-world problems.' },
 ]
 
+// Photos shown in the About section (files in /public/about/). Alt text describes what is in the picture.
+export const aboutPhotos = [
+  {
+    src: '/about/workshop-talk.webp',
+    alt: 'Speaking into a microphone in front of a classroom of students working on laptops',
+    width: 900,
+    height: 1200,
+    position: '50% 72%',
+    caption: 'Speaking to students',
+  },
+  {
+    src: '/about/hands-on-session.webp',
+    alt: 'A group of students gathered around laptops and electronics at a hands-on session',
+    width: 717,
+    height: 403,
+    position: '50% 50%',
+    caption: 'Hands-on session',
+  },
+]
+
 export const education = [
   {
     school: 'Rajalakshmi Engineering College, Chennai',
