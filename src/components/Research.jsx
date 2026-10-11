@@ -143,7 +143,7 @@ export default function Research() {
           Research <em>papers</em>
         </>
       }
-      subtitle="Two manuscripts: one under review, one in preparation."
+      subtitle="One manuscript, currently under review."
     >
       <div className="papers">
         {papers.map((paper) => (

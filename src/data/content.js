@@ -1,7 +1,6 @@
 import {
   Ambulance,
   BarChart3,
-  Binary,
   BookOpen,
   Brain,
   CalendarCheck,
@@ -15,7 +14,6 @@ import {
   HeartPulse,
   Layers,
   Palette,
-  Rocket,
   ScanEye,
   ScanSearch,
   Terminal,
@@ -66,7 +64,6 @@ export const skillGroups = [
     skills: [
       { name: 'Python', icon: Terminal },
       { name: 'Java', icon: Coffee },
-      { name: 'C/C++', icon: Binary },
     ],
   },
   {
@@ -106,7 +103,6 @@ export const skillGroups = [
       { name: 'Git', icon: GitBranch },
       { name: 'GitHub', icon: GithubIcon },
       { name: 'VS Code', icon: Braces },
-      { name: 'Antigravity', icon: Rocket },
     ],
   },
   {
@@ -264,9 +260,9 @@ export const projects = [
 
 export const achievements = [
   {
-    event: 'VMEDITTHON V3.0',
+    event: 'VMEDITHON V3.0',
     badge: 'Finalist',
-    text: 'Selected as a finalist at VMEDITTHON V3.0.',
+    text: 'Selected as a finalist at VMEDITHON V3.0.',
   },
   {
     event: "CIH'26",

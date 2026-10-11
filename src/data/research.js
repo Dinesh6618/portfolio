@@ -45,13 +45,4 @@ export const papers = [
       'Forensic-validity & governance analysis',
     ],
   },
-  {
-    id: 'phq9',
-    number: 'PAPER 02',
-    meta: [{ text: 'PSYCHOLOGYAI' }, { text: 'MANUSCRIPT' }],
-    status: { label: 'IN PREPARATION', sub: '', tone: 'prep' },
-    title: 'Depression-Severity Classification from PHQ-9 Responses',
-    description:
-      'A manuscript on a scikit-learn text classifier for depression-severity analysis, aimed at early-intervention outreach to at-risk users.',
-  },
 ]
