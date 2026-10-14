@@ -98,6 +98,12 @@ export default function MomentsDeck({ photos }) {
           })}
         </div>
 
+        <div className="deck-story" aria-live="polite" aria-atomic="true">
+          <span className="deck-story-label">Project / {pad(active + 1)}</span>
+          <h4>{photos[active].title}</h4>
+          <p>{photos[active].description}</p>
+        </div>
+
         {/* tick marks: one per photo, the current one lit */}
         <div className="deck-ticks" aria-hidden="true">
           {photos.map((photo, i) => (

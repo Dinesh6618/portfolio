@@ -51,6 +51,8 @@ export const aboutPhotos = [
     height: 1200,
     position: '50% 72%',
     caption: 'Speaking to students',
+    title: 'CLICK',
+    description: 'Developed CLICK, a C-learning platform by Team DADA, deployed across all 7 first-year AI & DS sections at Rajalakshmi Engineering College. Features include microlearning, chapter tests, coding practice, and progress tracking, with support for PWA, Windows, Android, and a VS Code extension. Built using Supabase PostgreSQL and Cloudflare Workers with zero department budget.',
   },
   {
     src: '/about/hands-on-session.webp',
@@ -59,6 +61,8 @@ export const aboutPhotos = [
     height: 403,
     position: '50% 50%',
     caption: 'Hands-on session',
+    title: 'SEVPS',
+    description: 'Developed SEVPS (Smart Emergency Vehicle Priority System), an AI-powered platform designed to reduce ambulance delays through intelligent routing, traffic-signal priority, congestion prediction, and hospital readiness tracking. Implemented role-based dashboards, real-time WebSocket updates, push notifications, and GIS-based routing using PostGIS. Shortlisted through multiple evaluation rounds at CIH’26, a 24-hour national hackathon among 800+ participating teams.',
   },
 ]
 

@@ -40,6 +40,16 @@ export default function About() {
         </div>
 
         <div className="about-edu">
+          <Reveal as="figure" className="about-portrait">
+            <img
+              src="/about/dinesh-portrait.jpeg"
+              alt="Dinesh G in a white shirt standing outdoors among green plants"
+              width={1600}
+              height={1200}
+              loading="lazy"
+              decoding="async"
+            />
+          </Reveal>
           <Reveal as="h3" className="subhead">
             <GraduationCap size={18} aria-hidden="true" /> Education
           </Reveal>
