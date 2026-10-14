@@ -64,6 +64,16 @@ export const aboutPhotos = [
     title: 'SEVPS',
     description: 'Developed SEVPS (Smart Emergency Vehicle Priority System), an AI-powered platform designed to reduce ambulance delays through intelligent routing, traffic-signal priority, congestion prediction, and hospital readiness tracking. Implemented role-based dashboards, real-time WebSocket updates, push notifications, and GIS-based routing using PostGIS. Shortlisted through multiple evaluation rounds at CIH’26, a 24-hour national hackathon among 800+ participating teams.',
   },
+  {
+    src: '/about/gramsentinel-hackathon.png',
+    alt: 'Dinesh working on a laptop at the VMEDITHON V3.0 hackathon',
+    width: 421,
+    height: 692,
+    position: '50% 50%',
+    caption: 'VMEDITHON V3.0 finalist',
+    title: 'GramSentinel',
+    description: 'Developed GramSentinel, an AI-powered, multi-agent rural healthcare early-warning system combining community signals and individual health insights to identify potential health risks. Integrated human-in-the-loop review, evidence-based risk assessment, scenario replay, and What-If simulation for informed decision-making. Proudly emerged as a finalist at VMEDITHON V3.0, a 24-hour hackathon.',
+  },
 ]
 
 export const education = [
