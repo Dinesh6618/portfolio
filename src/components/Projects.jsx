@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowUpRight, Check, ExternalLink } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, ExternalLink } from 'lucide-react'
 import Section from './Section.jsx'
 import Reveal from './Reveal.jsx'
 import Spotlight from './Spotlight.jsx'
@@ -8,6 +8,7 @@ import Words from './Words.jsx'
 import { GithubIcon } from './Icons.jsx'
 import { projectFilters, projects } from '../data/content.js'
 import './ProjectCoverVideo.css'
+import './ProjectBook.css'
 
 // Card cover. It plays like a short video: the project's screenshots crossfade one after another, each with a
 // slow pan and zoom, and a thin progress bar shows where it is. Playback runs only while the card is on screen and
@@ -116,7 +117,7 @@ function ProjectCard({ project, number, onOpen }) {
   const { name, tagline, icon: Icon, accent, tech, description, features, links } = project
 
   return (
-    <Spotlight as="article" tilt className="project-card" style={{ '--accent': accent }} aria-labelledby={`p-${project.id}`}>
+    <Spotlight as="article" className="project-card" style={{ '--accent': accent }} aria-labelledby={`p-${project.id}`}>
       <Cover project={project} index={number} />
       <div className="project-body">
         <div className="project-top">
@@ -185,11 +186,27 @@ function ProjectCard({ project, number, onOpen }) {
 export default function Projects() {
   const [filter, setFilter] = useState('All')
   const [activeId, setActiveId] = useState(null)
+  const [page, setPage] = useState(0)
+  const [turn, setTurn] = useState(null)
+  const turnTimer = useRef(null)
+  const bookTrack = useRef(null)
+
+  useEffect(() => () => clearTimeout(turnTimer.current), [])
+
+  const changeFilter = (value) => {
+    clearTimeout(turnTimer.current)
+    setTurn(null)
+    setPage(0)
+    setFilter(value)
+  }
 
   // The command palette asks for a project by id.
   useEffect(() => {
     const onOpen = (event) => {
       setFilter('All')
+      clearTimeout(turnTimer.current)
+      setTurn(null)
+      setPage(Math.max(0, projects.findIndex((p) => p.id === event.detail)))
       setActiveId(event.detail)
     }
     window.addEventListener('open-project', onOpen)
@@ -199,6 +216,43 @@ export default function Projects() {
   const visible = projects.filter((p) => filter === 'All' || p.categories.includes(filter))
   const countFor = (f) => (f === 'All' ? projects.length : projects.filter((p) => p.categories.includes(f)).length)
   const active = projects.find((p) => p.id === activeId)
+  const current = visible[Math.min(page, visible.length - 1)]
+  useEffect(() => {
+    let frame = 0
+    const update = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const track = bookTrack.current
+        if (!track || document.querySelector('dialog[open]')) return
+        const distance = -track.getBoundingClientRect().top + 90
+        const step = window.innerHeight * 0.85
+        setPage(Math.max(0, Math.min(visible.length - 1, Math.floor(distance / step))))
+      })
+    }
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [visible.length])
+
+  const turnPage = (direction) => {
+    const next = page + direction
+    if (turn || next < 0 || next >= visible.length) return
+    const track = bookTrack.current
+    if (track) window.scrollTo({ top: window.scrollY + track.getBoundingClientRect().top - 90 + next * window.innerHeight * 0.85 + 2, behavior: 'instant' })
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setPage(next)
+      return
+    }
+    setTurn(direction > 0 ? 'forward' : 'backward')
+    turnTimer.current = window.setTimeout(() => {
+      setPage(next)
+      setTurn(null)
+    }, 420)
+  }
 
   return (
     <Section
@@ -206,11 +260,11 @@ export default function Projects() {
       index={3}
       label="Projects"
       title={<>Selected <em>projects</em></>}
-      subtitle="AI/DS, real-time and full-stack work. Open a project for its screenshots and full feature list."
+      subtitle="A book of things I’ve built. Turn the page to explore the next project."
     >
       <Reveal className="filter-bar" role="group" aria-label="Filter projects by category">
         {projectFilters.map((f) => (
-          <button key={f} type="button" className="filter-chip" aria-pressed={filter === f} onClick={() => setFilter(f)}>
+          <button key={f} type="button" className="filter-chip" aria-pressed={filter === f} onClick={() => changeFilter(f)}>
             {f}
             <span className="count">{countFor(f)}</span>
           </button>
@@ -221,13 +275,29 @@ export default function Projects() {
         {filter !== 'All' ? ` in ${filter}` : ''}
       </p>
 
-      <ul className="project-grid" key={filter}>
-        {visible.map((project, i) => (
-          <Reveal as="li" key={project.id} delay={i * 70}>
-            <ProjectCard project={project} number={projects.indexOf(project) + 1} onOpen={setActiveId} />
-          </Reveal>
-        ))}
-      </ul>
+      <p className="book-scroll-hint">Scroll down to turn the pages ↓</p>
+      <div ref={bookTrack} className="book-scroll-track" style={{ '--book-steps': visible.length - 1 }}>
+      <div className="project-book" role="region" aria-label="Project book" tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.target !== event.currentTarget) return
+          if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+            event.preventDefault()
+            turnPage(event.key === 'ArrowRight' ? 1 : -1)
+          }
+        }}>
+        <div className="book-heading"><BookOpen size={18} aria-hidden="true" /><span>THE PROJECT COLLECTION</span><span>VOL. 01</span></div>
+        <div className="book-spread" data-turn={turn || undefined} aria-busy={Boolean(turn)}>
+          {current && <div className="book-page" key={`${filter}-${current.id}`}>
+            <ProjectCard project={current} number={projects.indexOf(current) + 1} onOpen={setActiveId} />
+          </div>}
+        </div>
+        <nav className="book-navigation" aria-label="Project pages">
+          <button className="btn btn-secondary btn-sm" type="button" disabled={page === 0 || Boolean(turn)} onClick={() => turnPage(-1)}><ArrowLeft size={17} aria-hidden="true" /> Previous</button>
+          <span className="book-page-count" role="status" aria-live="polite">Page {page + 1} of {visible.length}<span>{current?.name}</span></span>
+          <button className="btn btn-primary btn-sm" type="button" disabled={page >= visible.length - 1 || Boolean(turn)} onClick={() => turnPage(1)}>Next project <ArrowRight size={17} aria-hidden="true" /></button>
+        </nav>
+      </div>
+      </div>
 
       {active && <ProjectModal key={active.id} project={active} onClose={() => setActiveId(null)} />}
     </Section>
